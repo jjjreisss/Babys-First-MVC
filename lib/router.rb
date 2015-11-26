@@ -61,6 +61,9 @@ class Router
       return route if route.matches?(req)
     end
     return nil
+    # @routes.find do |route|
+    #   route.matches?(req)
+    # end
   end
 
   # either throw 404 or call run on a matched route
@@ -69,7 +72,7 @@ class Router
     if route
       route.run(req, res)
     else
-      res.status = 404
+      raise "#{req.env['REQUEST_URI']}"
     end
   end
 end

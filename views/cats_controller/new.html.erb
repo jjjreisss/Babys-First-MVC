@@ -1,11 +1,4 @@
-<form action="/cats" method="POST">
-  <label>Name
-    <input type="text" name="cat[name]" value="<%= @cat.name %>">
-  </label>
+<%= flash["errors"] %>
+class: <%= flash.class %>
 
-  <label>Owner
-    <input type="text" name="cat[owner]" value="<%= @cat.owner %>">
-  </label>
-
-  <input type="submit">
-</form>
+NEW CAT PAGE

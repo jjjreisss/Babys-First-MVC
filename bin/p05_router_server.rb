@@ -1,6 +1,7 @@
 require 'rack'
 require_relative '../lib/controller_base'
 require_relative '../lib/router'
+require_relative 'middleware'
 
 
 $cats = [
@@ -27,21 +28,35 @@ end
 class CatsController < ControllerBase
   def index
     # render_content($cats.to_s, "text/text")
+    flash.now["errors"] = ["I'm a flash.now"]
+    flash["errors"] = ["I'm a flash"]
+
+    # redirect_to "cats/new"
   end
-  
+
+  def new
+  end
+
 end
 
 router = Router.new
 router.draw do
+  get Regexp.new("^/cats/new$"), CatsController, :new
   get Regexp.new("^/cats$"), CatsController, :index
   get Regexp.new("^/cats/(?<cat_id>\\d+)/statuses$"), StatusesController, :index
 end
 
-app = Proc.new do |env|
+lame_app = Proc.new do |env|
   req = Rack::Request.new(env)
   res = Rack::Response.new
   router.run(req, res)
   res.finish
+end
+
+app = Rack::Builder.new do
+  use Errorware
+  use Pictureware
+  run lame_app
 end
 
 Rack::Server.start(
