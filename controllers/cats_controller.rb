@@ -1,9 +1,9 @@
 require 'require_all'
 require_relative '../models/cat'
+require_relative '../models/human'
 require_relative '../lib/params'
 require 'byebug'
 
-require_rel '../active-record-create/lib/*'
 class CatsController < ControllerBase
   def index
     flash.now["errors"] = ["I'm a flash.now"]
@@ -16,7 +16,8 @@ class CatsController < ControllerBase
   end
 
   def create
-    @cat = Cat.new(name: params["cat"]["name"], owner_id: params["cat"]["owner_id"])
+    owner = Human.where(fname: params["cat"]["owner"]).first
+    @cat = Cat.new(name: params["cat"]["name"], owner_id: owner.id)
     if @cat.insert
       redirect_to("cats")
     else

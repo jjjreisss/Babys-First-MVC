@@ -2,5 +2,8 @@
 class: <%= flash.class %>
 
 <h1>ALL THE CATS</h1>
-<p><%= @cats.to_s %></p>
+<% @cats.each do |cat| %>
+  <p>Name: <%= cat.name %></p>
+<% end %>
+
 <a href="/cats/new">New cat!</a>
