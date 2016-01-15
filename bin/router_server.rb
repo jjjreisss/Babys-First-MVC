@@ -1,7 +1,10 @@
 require 'rack'
+require 'require_all'
 require_relative '../lib/controller_base'
 require_relative '../lib/router'
 require_relative 'middleware'
+require_rel '../controllers/*'
+require_rel '../active-record-create/lib/*'
 
 
 $cats = [
@@ -15,38 +18,21 @@ $statuses = [
   { id: 3, cat_id: 1, text: "Curie is cool!" }
 ]
 
-class StatusesController < ControllerBase
-  def index
-    statuses = $statuses.select do |s|
-      s[:cat_id] == Integer(params['cat_id'])
-    end
-
-    render_content(statuses.to_s, "text/text")
-  end
-end
-
-class CatsController < ControllerBase
-  def index
-    # render_content($cats.to_s, "text/text")
-    flash.now["errors"] = ["I'm a flash.now"]
-    flash["errors"] = ["I'm a flash"]
-
-    # redirect_to "cats/new"
-  end
-
-  def new
-  end
-
-end
 
 router = Router.new
 router.draw do
   get Regexp.new("^/cats/new$"), CatsController, :new
   get Regexp.new("^/cats$"), CatsController, :index
+  get Regexp.new("^/cats/(?<cat_id>\\d+)$"), CatsController, :show
+  post Regexp.new("^/cats$"), CatsController, :create
   get Regexp.new("^/cats/(?<cat_id>\\d+)/statuses$"), StatusesController, :index
+  get Regexp.new("^/dogs/new$"), DogsController, :new
+  get Regexp.new("^/dogs$"), DogsController, :index
+  get Regexp.new("^/dogs/(?<dog_id>\\d+)$"), DogsController, :show
+
 end
 
-lame_app = Proc.new do |env|
+app_without_middleware = Proc.new do |env|
   req = Rack::Request.new(env)
   res = Rack::Response.new
   router.run(req, res)
@@ -56,7 +42,7 @@ end
 app = Rack::Builder.new do
   use Errorware
   use Pictureware
-  run lame_app
+  run app_without_middleware
 end
 
 Rack::Server.start(

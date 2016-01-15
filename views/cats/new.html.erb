@@ -1,0 +1,20 @@
+<%= flash["errors"] %>
+class: <%= flash.class %>
+
+  <% if flash[:errors] %>
+    <% flash[:errors].each do |error| %>
+      <%= error %>
+    <% end %>
+  <% end %>
+
+  <form action="/cats" method="POST">
+    <label>Name
+      <input type="text" name="cat[name]" value="">
+    </label>
+
+    <label>Owner
+      <input type="text" name="cat[owner_id]" value="">
+    </label>
+
+    <input type="submit">
+  </form>
