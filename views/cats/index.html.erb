@@ -4,7 +4,6 @@ class: <%= flash.class %>
 <h1>ALL THE CATS</h1>
 <% @cats.each do |cat| %>
   <p>Name: <%= cat.name %></p>
-  <p>Owner: <%= cat.owner.fname %></p>
 <% end %>
 
 <a href="/cats/new">New cat!</a>
