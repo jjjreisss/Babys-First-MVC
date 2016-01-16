@@ -1,5 +1,4 @@
-require_relative 'db_connection'
-require_relative 'model_base'
+require_relative '../db_connection'
 
 module Searchable
   def where(params)
@@ -15,8 +14,4 @@ module Searchable
       new(row)
     end
   end
-end
-
-class SQLObject
-  extend Searchable
 end

@@ -4,7 +4,6 @@ require_relative '../lib/controller_base'
 require_relative '../lib/router'
 require_relative 'middleware'
 require_rel '../controllers/*'
-require_rel '../lib/*'
 
 
 $cats = [

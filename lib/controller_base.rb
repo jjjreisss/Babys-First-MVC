@@ -5,7 +5,6 @@ require 'require_all'
 require_relative './session'
 require_relative './flash'
 require_relative 'params'
-require_rel '../lib/*'
 
 class ControllerBase
   attr_reader :req, :res, :params

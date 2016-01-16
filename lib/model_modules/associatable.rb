@@ -63,26 +63,22 @@ module Associatable
   end
 
   def has_one_through(name, through_name, source_name)
-  define_method(name) do
-    through_opts = self.class.assoc_options[through_name]
-    source_opts = through_opts.model_class.assoc_options[source_name]
-    f_key = self.send(through_opts.foreign_key)
-    data = DBConnection.execute(<<-SQL, f_key)
-      SELECT
-        #{source_opts.table_name}.*
-      FROM
-        #{through_opts.table_name}
-      INNER JOIN
-        #{source_opts.table_name}
-      ON #{source_opts.foreign_key} = #{source_opts.table_name}.#{source_opts.primary_key}
-      WHERE
-        #{through_opts.table_name}.#{through_opts.primary_key} = ?
-    SQL
-    data.empty? ? nil : source_opts.model_class.new(data.first)
+    define_method(name) do
+      through_opts = self.class.assoc_options[through_name]
+      source_opts = through_opts.model_class.assoc_options[source_name]
+      f_key = self.send(through_opts.foreign_key)
+      data = DBConnection.execute(<<-SQL, f_key)
+        SELECT
+          #{source_opts.table_name}.*
+        FROM
+          #{through_opts.table_name}
+        INNER JOIN
+          #{source_opts.table_name}
+        ON #{source_opts.foreign_key} = #{source_opts.table_name}.#{source_opts.primary_key}
+        WHERE
+          #{through_opts.table_name}.#{through_opts.primary_key} = ?
+      SQL
+      data.empty? ? nil : source_opts.model_class.new(data.first)
+    end
   end
-end
-end
-
-class SQLObject
-  extend Associatable
 end

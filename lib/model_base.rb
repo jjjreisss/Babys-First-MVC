@@ -1,10 +1,10 @@
-require_relative 'db_connection'
 require 'active_support/inflector'
-require_relative 'searchable'
-# NB: the attr_accessor we wrote in phase 0 is NOT used in the rest
-# of this project. It was only a warm up.
+require 'require_all'
+require_rel 'model_modules/*'
 
 class SQLObject
+  extend Searchable
+  extend Associatable
 
   def self.columns
     @columns || (
