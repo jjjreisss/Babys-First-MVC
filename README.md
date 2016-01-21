@@ -40,11 +40,8 @@ This serves as the base class for user-generated models. It is a lightweight ver
 
 Included methods are the standard queries:
 
-#all
-#find
-#insert
-#update
-#save
+####all, find, insert, update, save
+
 In addition, inheriting from SQLObject grants the #where method from the Searchable module, to dynamically query from the SQL RDBMS.
 
 The Associatable module is extended as well, to provide the three standard methods for model associations:
